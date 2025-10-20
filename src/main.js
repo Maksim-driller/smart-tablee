@@ -9,7 +9,6 @@ import { initData } from "./data.js";
 import { data as sourceData } from "./data/dataset_1.js";
 import { processFormData } from "./lib/utils.js";
 
-// Исходные данные используемые в render()
 const API = initData(sourceData);
 
 /**
@@ -57,12 +56,8 @@ async function render(action) {
     try {
         let state = collectState();
         let query = {};
-
-        // Применяем параметры к query
         query = applySorting(query, state, action);
         query = applySearching(query, state, action);
-
-        // Если есть функции фильтрации и пагинации - применяем их
         if (typeof applyFiltering === 'function') {
             query = applyFiltering(query, state, action);
         }
@@ -71,14 +66,10 @@ async function render(action) {
             query = applyPagination(query, state, action);
         }
 
-        // Получаем данные из API
         const { total, items } = await API.getRecords(query);
-        // Обновляем пагинацию если есть функция
         if (typeof updatePagination === 'function') {
             updatePagination(total, query);
         }
-
-        // Рендерим таблицу с полученными данными
         sampleTable.render(items);
 
     } catch (error) {
@@ -99,10 +90,8 @@ const sampleTable = initTable(
     render
 );
 
-// Затем инициализируем компоненты
 let applyPagination, updatePagination, applyFiltering, updateIndexes;
 
-// Инициализация пагинации
 if (sampleTable.paginationElements) {
     const pagination = initPagination(
         {
@@ -124,7 +113,6 @@ if (sampleTable.paginationElements) {
     updatePagination = pagination.updatePagination;
 }
 
-// Инициализация фильтрации (если компонент существует)
 if (typeof initFiltering === 'function' && sampleTable.filter && sampleTable.filter.elements) {
     try {
         const filtering = initFiltering(sampleTable.filter.elements);
@@ -146,14 +134,9 @@ const applySearching = initSearching("search");
 
 const appRoot = document.querySelector("#app");
 appRoot.appendChild(sampleTable.container);
-
-// Асинхронная функция инициализации
 async function init() {
     try {
         const indexes = await API.getIndexes();
-        console.log('Indexes loaded:', indexes);
-
-        // Обновляем индексы для фильтрации если есть функция
         if (typeof updateIndexes === 'function' && sampleTable.filter && sampleTable.filter.elements) {
             updateIndexes(sampleTable.filter.elements, {
                 searchBySeller: indexes.sellers || []
