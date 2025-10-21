@@ -9,6 +9,8 @@ export function initFiltering(elements) {
                 return el;
             }))
         })
+
+
     }
 
     const applyFiltering = (query, state, action) => {
