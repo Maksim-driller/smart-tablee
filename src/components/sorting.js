@@ -13,14 +13,14 @@ export function initSorting(columns) {
 
             // @todo: #3.2 — сбросить сортировки остальных колонок
             columns.forEach(column => {
-                if (column.dataset.field !== action.dataset.field) {
+                if (column && column.dataset.field !== action.dataset.field) {
                     column.dataset.value = 'none';
                 }
             });
         } else {
             // @todo: #3.3 — получить выбранный режим сортировки
             columns.forEach(column => {
-                if (column.dataset.value !== 'none') {
+                if (column && column.dataset.value !== 'none') {
                     field = column.dataset.field;
                     order = column.dataset.value;
                 }

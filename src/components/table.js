@@ -19,10 +19,12 @@ export function initTable(settings, onAction) {
     // Соберем элементы из дополнительных шаблонов
     let headerElements = {};
     let paginationElements = {};
+    let filterElements = {};
 
     // Вставка перед таблицей
     clone_before.forEach(({ id, node, elements }) => {
         if (id === "header") headerElements = elements;
+        if (id === "filter") filterElements = elements;
         root.container.prepend(node);
     });
 
@@ -66,6 +68,7 @@ export function initTable(settings, onAction) {
         ...root,
         render,
         header: { elements: headerElements },
+        filter: { elements: filterElements },
         paginationElements,
     };
 }
