@@ -114,7 +114,10 @@ const sampleTable = initTable(
 let applyPagination, updatePagination, applyFiltering, updateIndexes;
 
 if (sampleTable.paginationElements) {
-  const pagination = initPagination(
+  const {
+    applyPagination: applyPaginationFunc,
+    updatePagination: updatePaginationFunc,
+  } = initPagination(
     {
       pages: sampleTable.paginationElements.pages,
       fromRow: sampleTable.paginationElements.fromRow,
@@ -130,8 +133,8 @@ if (sampleTable.paginationElements) {
       return el;
     }
   );
-  applyPagination = pagination.applyPagination;
-  updatePagination = pagination.updatePagination;
+  applyPagination = applyPaginationFunc;
+  updatePagination = updatePaginationFunc;
 }
 
 if (
@@ -140,9 +143,12 @@ if (
   sampleTable.filter.elements
 ) {
   try {
-    const filtering = initFiltering(sampleTable.filter.elements);
-    applyFiltering = filtering.applyFiltering;
-    updateIndexes = filtering.updateIndexes;
+    const {
+      applyFiltering: applyFilteringFunc,
+      updateIndexes: updateIndexesFunc,
+    } = initFiltering(sampleTable.filter.elements);
+    applyFiltering = applyFilteringFunc;
+    updateIndexes = updateIndexesFunc;
   } catch (error) {
     console.warn("Filtering initialization failed:", error);
   }
@@ -159,6 +165,7 @@ const applySearching = initSearching("search");
 
 const appRoot = document.querySelector("#app");
 appRoot.appendChild(sampleTable.container);
+
 async function init() {
   try {
     const indexes = await API.getIndexes();
