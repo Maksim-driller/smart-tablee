@@ -28,19 +28,14 @@ function collectState() {
     page
   };
 }
-
 async function render(action) {
   let state = collectState();
   let query = {};
-
   query = applySearching(query, state, action);
   query = applyFiltering(query, state, action);
   query = applySorting(query, state, action);
   query = applyPagination(query, state, action);
-
-
   const { total, items } = await api.getRecords(query);
-
   updatePagination(total, query);
   sampleTable.render(items);
 }
