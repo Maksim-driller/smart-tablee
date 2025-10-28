@@ -14,7 +14,6 @@ import { initSearching } from "./components/searching.js";
 import { initSorting } from "./components/sorting.js";
 
 const api = initData(sourceData);
-let indexes = {};
 
 function collectState() {
   const state = processFormData(new FormData(sampleTable.container));
